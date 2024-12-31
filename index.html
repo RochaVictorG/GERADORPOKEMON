@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon Gerador</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #pokemon-img {
+            filter: brightness(0);
+            width: 300px;
+            height: 300px;
+            object-fit: contain;
+        }
+
+        #pokemon-name {
+            font-size: 20px;
+            font-weight: bold;
+            display: none;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 32px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            position: absolute;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #timer {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <button id="generate-btn">GERAR</button>
+    <div id="container">
+        <div id="timer">10</div>
+        <img id="pokemon-img" src="" alt="Pokémon">
+        <div id="pokemon-name"></div>
+    </div>
+
+    <script>
+        const imagesFolder = "images"; // Pasta contendo as 151 imagens
+        const totalPokemon = 151; // Total de Pokémon da primeira geração
+
+        const generateBtn = document.getElementById("generate-btn");
+        const container = document.getElementById("container");
+        const timer = document.getElementById("timer");
+        const pokemonImg = document.getElementById("pokemon-img");
+        const pokemonName = document.getElementById("pokemon-name");
+
+        const pokemonNames = [
+            "Bulbasaur", "Ivysaur", "Venusaur", "Charmander", "Charmeleon", "Charizard", 
+            "Squirtle", "Wartortle", "Blastoise", "Caterpie", "Metapod", "Butterfree", 
+            "Weedle", "Kakuna", "Beedrill", "Pidgey", "Pidgeotto", "Pidgeot", 
+            "Rattata", "Raticate", "Spearow", "Fearow", "Ekans", "Arbok", 
+            "Pikachu", "Raichu", "Sandshrew", "Sandslash", "Nidoran♀", "Nidorina", 
+            "Nidoqueen", "Nidoran♂", "Nidorino", "Nidoking", "Clefairy", "Clefable", 
+            "Vulpix", "Ninetales", "Jigglypuff", "Wigglytuff", "Zubat", "Golbat", 
+            "Oddish", "Gloom", "Vileplume", "Paras", "Parasect", "Venonat", "Venomoth", 
+            "Diglett", "Dugtrio", "Meowth", "Persian", "Psyduck", "Golduck", 
+            "Mankey", "Primeape", "Growlithe", "Arcanine", "Poliwag", "Poliwhirl", 
+            "Poliwrath", "Abra", "Kadabra", "Alakazam", "Machop", "Machoke", "Machamp", 
+            "Bellsprout", "Weepinbell", "Victreebel", "Tentacool", "Tentacruel", 
+            "Geodude", "Graveler", "Golem", "Ponyta", "Rapidash", "Slowpoke", 
+            "Slowbro", "Magnemite", "Magneton", "Farfetch’d", "Doduo", "Dodrio", 
+            "Seel", "Dewgong", "Grimer", "Muk", "Shellder", "Cloyster", "Gastly", 
+            "Haunter", "Gengar", "Onix", "Drowzee", "Hypno", "Krabby", "Kingler", 
+            "Voltorb", "Electrode", "Exeggcute", "Exeggutor", "Cubone", "Marowak", 
+            "Hitmonlee", "Hitmonchan", "Lickitung", "Koffing", "Weezing", "Rhyhorn", 
+            "Rhydon", "Chansey", "Tangela", "Kangaskhan", "Horsea", "Seadra", 
+            "Goldeen", "Seaking", "Staryu", "Starmie", "Mr. Mime", "Scyther", 
+            "Jynx", "Electabuzz", "Magmar", "Pinsir", "Tauros", "Magikarp", 
+            "Gyarados", "Lapras", "Ditto", "Eevee", "Vaporeon", "Jolteon", 
+            "Flareon", "Porygon", "Omanyte", "Omastar", "Kabuto", "Kabutops", 
+            "Aerodactyl", "Snorlax", "Articuno", "Zapdos", "Moltres", "Dratini", 
+            "Dragonair", "Dragonite", "Mewtwo", "Mew"
+        ];
+
+        generateBtn.addEventListener("click", () => {
+            // Seleciona um Pokémon aleatório
+            const randomIndex = Math.floor(Math.random() * totalPokemon);
+            const imageName = `${randomIndex + 1}.png`; // Nome da imagem (exemplo: 1.png, 2.png)
+            const name = pokemonNames[randomIndex];
+
+            // Atualiza a interface
+            pokemonImg.src = `${imagesFolder}/${imageName}`;
+            pokemonImg.style.filter = "brightness(0)";
+            pokemonName.textContent = name;
+            pokemonName.style.display = "none";
+
+            generateBtn.style.display = "none"; // Esconde o botão
+            container.style.display = "block";
+
+            // Contagem regressiva
+            let countdown = 10;
+            timer.textContent = countdown;
+            const interval = setInterval(() => {
+                countdown--;
+                timer.textContent = countdown;
+
+                if (countdown === 0) {
+                    clearInterval(interval);
+                    timer.textContent = ""; // Remove o número da contagem
+                    revealPokemon();
+                }
+            }, 1000);
+        });
+
+        function revealPokemon() {
+            pokemonImg.style.filter = "brightness(1)";
+            pokemonName.style.display = "block";
+            setTimeout(resetInterface, 5000);
+        }
+
+        function resetInterface() {
+            generateBtn.style.display = "block";
+            container.style.display = "none";
+        }
+    </script>
+</body>
+</html>
